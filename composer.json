@@ -38,7 +38,7 @@
         "laravel": {
             "dont-discover": [
             ]
-        }  
+        }
     },
     "scripts": {
         "post-root-package-install": [

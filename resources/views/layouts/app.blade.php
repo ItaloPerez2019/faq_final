@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
@@ -31,7 +31,7 @@
                 </a>
             @else
 
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     Home
                 </a>
             @endguest
@@ -73,7 +73,11 @@
         </div>
     </nav>
     <main class="py-4">
-
+        <div class="col-12">
+        @include('flash.error')
+        @include('flash.messages')
+        @include('flash.status')
+        </div>
         @yield('content')
     </main>
 </div>

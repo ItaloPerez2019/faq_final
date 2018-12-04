@@ -6,14 +6,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">Questions
-                        <a class="btn btn-primary float-right" href="#">
-                            Create a question
+                            <a class="btn btn-primary float-right" href="{{ route('question.create')}}">
+                                Create a question
+                            </a>
                         </a>
 
                         <div class="card-body">
 
                             <div class="card-deck">
-                                @foreach($questions as $question)
+                                @forelse($questions as $question)
                                     <div class="col-sm-4 d-flex align-items-stretch">
                                         <div class="card mb-3 ">
                                             <div class="card-header">
@@ -36,8 +37,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
-
+                                @empty
+                                        There are not question to view, you can create a new question.
+                                @endforelse
                             </div>
                         </div>
                         <div class="card-footer">

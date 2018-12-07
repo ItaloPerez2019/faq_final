@@ -5,14 +5,14 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Questions
-                            <a class="btn btn-primary float-right" href="{{ route('question.create')}}">
-                                Create a question
-                            </a>
+                    <div class="card-header">Questions <span class="badge badge-secondary">{{$questions->count()}}</span>
+                        <span class="badge badge-danger"></span>
+                        <a class="btn btn-primary btn-sm float-right" href="{{ route('question.create')}}">
+                            Create a Question
                         </a>
+                    </div>
 
-                        <div class="card-body">
-
+                    <div class="card-body">
                             <div class="card-deck">
                                 @forelse($questions as $question)
                                     <div class="col-sm-4 d-flex align-items-stretch">
@@ -20,8 +20,9 @@
                                             <div class="card-header">
                                                 <small class="text-muted">
                                                     Updated: {{ $question->created_at->diffForHumans() }}
-                                                    Answers: {{ $question->answers()->count() }}
-
+                                                </small>
+                                                <small class="text-muted float-right" style="">
+                                                    Answers: <span class="badge badge-primary">{{ $question->answers()->count() }}</span>
                                                 </small>
                                             </div>
                                             <div class="card-body">
@@ -42,14 +43,14 @@
                                 @endforelse
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <div class="float-right">
-                                {{ $questions->links() }}
-                            </div>
-                        </div>
+
+                    <div class="float-right">
+                        {{ $questions->links() }}
+                    </div>
 
                     </div>
                 </div>
             </div>
         </div>
+
 @endsection

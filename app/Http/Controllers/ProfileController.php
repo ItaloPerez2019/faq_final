@@ -44,8 +44,8 @@ class ProfileController extends Controller
             'lname' => 'required',
             'body' => 'required',
         ], [
-            'fname.required' => 'First is required',
-            'lname.required' => 'Last is required',
+            'fname.required' => 'First Name is required',
+            'lname.required' => 'Last Name is required',
             'body.required' => 'Body is required',
         ]);
 
@@ -55,7 +55,9 @@ class ProfileController extends Controller
         $profile->user()->associate(Auth::user());
         $profile->save();
 
-        return redirect()->route('profile')->with('message', 'Profile Created');
+        session()->flash('app_message', 'Your profile has been Created!');
+
+        return redirect()->route('home');
     }
 
 
@@ -102,12 +104,15 @@ class ProfileController extends Controller
             'fname.required' => ' First is required',
             'lname.required' => ' Last is required',
         ]);
+
         $profile = Profile::find($profile);
         $profile->fname = $request->fname;
         $profile->lname = $request->lname;
         $profile->body = $request->body;
         $profile->save();
-        return redirect()->route('home')->with('message', 'Profile Created');
+        session()->flash('app_message', 'Your profile has been Updated!');
+
+        return redirect()->route('home');
     }
 
     public function destroy($id)

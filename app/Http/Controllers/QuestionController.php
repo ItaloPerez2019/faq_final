@@ -13,7 +13,6 @@ class QuestionController extends Controller
         $this->middleware('auth');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -49,15 +48,16 @@ class QuestionController extends Controller
             'body.required' => 'Body is required',
             'body.min' => 'Body must be at least 5 characters',
         ]);
-        $input = request()->all();
 
+        $input = request()->all();
 
         $question = new Question($input);
         $question->user()->associate(Auth::user());
         $question->save();
 
+        session()->flash('app_message', 'Your question has been Saved!');
 
-        return redirect()->route('home')->with('message', 'IT WORKS!');
+        return redirect()->route('home');
         // return redirect()->route('questions.show', ['id' => $question->id]);
     }
     /**
@@ -100,7 +100,8 @@ class QuestionController extends Controller
         $question->body = $request->body;
         $question->save();
 
-        return redirect()->route('question.show',['question_id' => $question->id])->with('message', 'Saved');
+        session()->flash('app_message', 'Your question has been Saved!');
+        return redirect()->route('question.show',['question_id' => $question->id]);
     }
     /**
      * Remove the specified resource from storage.
@@ -112,5 +113,19 @@ class QuestionController extends Controller
     {
         $question->delete();
         return redirect()->route('home')->with('message', 'Deleted');
+    }
+
+    public function likeDislike(Request $request)
+    {
+        $type = 'dislikes';
+
+        if($request->type =='up')
+            $type = 'likes';
+
+        $question = Question::find($request->question_id);
+
+        $question->$type++;
+        $question->save();
+
     }
 }

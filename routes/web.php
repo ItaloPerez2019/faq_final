@@ -38,7 +38,7 @@ Route::group(['prefix'=> 'questions'], function() {
     Route::patch('/{question_id}/answer/{answer_id}', 'AnswerController@update')->name('answer.update');
     Route::delete('/{question_id}/answer/{answer_id}', 'AnswerController@destroy')->name('answer.destroy');
 
-    Route::post('/vote','QuestionController@vote')->name('question.vote');
+    Route::post('/likeDislike','QuestionController@likeDislike')->name('question.likeDislike');
 
 });
 

@@ -43,21 +43,23 @@
                             {{$question->body}}
                         </p>
                         <p>
-                            <a class="float-right btn text-white btn-danger "> <i class="fa fa-thumbs-down"></i> DisLike ({{$question->dislikes}})</a>
-                            <a class="float-right btn text-white btn-primary mr-2"> <i class="fa fa-thumbs-up"></i> Like ({{$question->likes}})</a>
+                            <a class="question_vote_btn float-right btn text-white btn-danger" id="qs_vote_down" data-id="down" data-value="{{$question->dislikes}}">
+                                <i class="fa fa-thumbs-down"></i> DisLike (<span id="dislikeSpan">{{$question->dislikes}}</span>)
+                            </a>
+
+                            <a class="question_vote_btn float-right btn text-white btn-primary mr-2" id="qs_vote_up" data-id="up" data-value="{{$question->likes}}">
+                                <i class="fa fa-thumbs-up"></i> Like (<span id="likeSpan">{{$question->likes}}</span>)
+                            </a>
+
                         </p>
 
-                        <span id="content_vote_1">
-                                                <a id="content_dn_1" class="content_vote_btn btn btn-default" role="button"><i class="fa fa-thumbs-o-down fa-lg"></i> <span id="content_dn_label_1">1</span></a>
-                                                <a id="content_up_1" class="content_vote_btn btn btn-default" role="button"><i class="fa fa-thumbs-o-up fa-lg"></i> <span id="content_up_label_1">1</span></a>
-                        </span>
                     </div>
 
                 </div>
                 <br/>
                 <br/>
                 @forelse($question->answers as $answer)
-                <div class="card card-inner">
+                    <div class="card card-inner">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -102,40 +104,44 @@
             });
 
             //Content voting
-            $(document).on("click", '.content_vote_btn', function (event) {
-                alert('ok');
-                var content_id = $(this).attr('id').substr(11);
-                var action = $(this).attr('id').substr(8,2);
-                var vote = 1;
-                if (action == 'dn')
-                    vote = -1;
+            $(document).on("click", '.question_vote_btn', function (event) {
 
-                if (vote > 0) {
-                    var count = parseInt($("#content_up_label_" + content_id).text()) || 0;
-                    count++;
-                    $("#content_up_label_" + content_id).text(count)
+                var question_id = "{{$question->id}}";
+
+                var id = $(this).attr('id');
+                var type = $(this).attr('data-id');
+                var total = $(this).attr('data-value');
+
+
+                if (type == 'up') {
+                    var likes = parseInt(total);
+                    likes++;
+                    $("#likeSpan").text(likes);
+                    $(this).attr('data-value', likes);
                 }
                 else {
-                    var count = parseInt($("#content_dn_label_" + content_id).text()) || 0;
-                    count++;
-                    $("#content_dn_label_" + content_id).text(count)
+                    var dislikes = parseInt(total);
+                    dislikes++;
+                    $("#dislikeSpan").text(dislikes);
+                    $(this).attr('data-value', dislikes);
                 }
 
                 var request = $.ajax({
                     method: "POST",
-                    url: "{{route('login')}}",
+                    url: "{{route('question.likeDislike')}}",
                     dataType: 'html',
                     data: {
-                        "vote":vote,
-                        "content_id": content_id
+                        "type":type,
+                        "question_id": question_id
                     }
                 });
 
                 request.done(function(data) {
-                    $("#content_voted_" + content_id).fadeIn();
+                    toastr.success("Your feedback saved successfully", "Message");
                 });
+
                 request.fail(function( jqXHR, textStatus ) {
-                    alert( jqXHR.status +':'+ jqXHR.statusText );
+                    toastr.error('Something went wrong', "Message");
                 });
             });
         });

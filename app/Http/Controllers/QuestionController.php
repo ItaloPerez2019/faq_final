@@ -113,4 +113,34 @@ class QuestionController extends Controller
         $question->delete();
         return redirect()->route('home')->with('message', 'Deleted');
     }
+
+    public function vote(Request $request)
+    {
+        if (isset($request->vote))
+            $vote = (int)$request->vote;
+        else
+            $vote = 1;
+
+        $content_id = $request->content_id;
+
+        $votes = session()->get('votes');
+        if (!isset($votes[$content_id]))
+        {
+            $content = \App\Content::find($content_id);
+            if ($vote > 0)
+                $content->likes++;
+            else
+                $content->dislikes++;
+            $content->save();
+            $votes[$content_id]=1;
+
+            //log
+            $contentVote = new \App\ContentVote();
+            $contentVote->content_id = $content_id;
+            $contentVote->rating = $vote;
+            $contentVote->date = date('Y-m-d H:i:s');
+            $contentVote->save();
+        }
+        session()->put('votes',$votes);
+    }
 }

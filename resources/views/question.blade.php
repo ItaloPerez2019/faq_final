@@ -4,6 +4,7 @@
     <style>
         .card-inner{
             margin-left: 50px;
+            margin-bottom: 5px;
         }
 
     </style>
@@ -21,7 +22,7 @@
                         <p class="text-secondary text-center">{{ $question->created_at->diffForHumans() }}</p>
                     </div>
                     <div class="col-md-10">
-                        <a href="{{ route('answer.create', ['question_id'=> $question->id])}}" class="float-right btn text-white btn-success "> <i class="fa fa-reply"></i> Answer The Question</a>
+                        <a href="{{ route('answer.create', ['question_id'=> $question->id])}}" class="float-right btn text-white btn-success "> <i class="fa fa-reply"></i> Answer This Question</a>
                         <div class="pull-left meta">
                             <div class="title h5">
                                 <a href="#"><b>{{ucfirst($question->user->email)}}</b></a>
@@ -31,7 +32,7 @@
                                href="{{ route('question.edit',['id'=> $question->id])}}">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            {{ Form::open(['method' => 'DELETE', 'route' => ['question.destroy', $question->id]])}}
+                            {{ Form::open(['method' => 'DELETE', 'onsubmit' =>"return confirm('Are you sure you to delete?');" ,'route' => ['question.destroy', $question->id]])}}
                             <button title="Delete the Question" class="btn btn-danger btn-sm float-left ml-3" value="sumit" id="sumit"><i class="fa fa-trash"></i>
                             </button>
                             {!! Form::close() !!}

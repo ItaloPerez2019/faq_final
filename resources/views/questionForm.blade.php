@@ -12,16 +12,15 @@
                             {!! Form::model($question, ['route' => ['question.update', $question->id], 'method' => 'patch']) !!}
                         @endif
                         <div class="form-group">
-                            {!! Form::label('body', 'Body') !!}
-                            {!! Form::text('body', $question->body, ['class' => 'form-control','required' => 'required']) !!}
+                            {!! Form::label('body', 'Write Question Here') !!}
+                            {!! Form::textarea('body', $question->body, ['class' => 'form-control','required' => 'required']) !!}
                         </div>
-                        <button class="btn btn-success float-right" value="submit" type="submit" id="submit">Save
+                        <button class="btn btn-success float-right" value="submit" type="submit" id="submit">Create
                         </button>
                         {!! Form::close() !!}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 @endsection

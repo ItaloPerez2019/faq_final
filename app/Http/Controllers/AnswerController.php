@@ -40,6 +40,7 @@ class AnswerController extends Controller
             'body.required' => 'Body is required',
             'body.min' => 'Body must be at least 5 characters',
         ]);
+
         $input = request()->all();
         $question = Question::find($question);
         $Answer = new Answer($input);
@@ -47,8 +48,10 @@ class AnswerController extends Controller
         $Answer->question()->associate($question);
         $Answer->save();
 
-        return redirect()->route('question.show',['question_id' => $question->id])->with('message', 'Saved');
+        session()->flash('app_message', 'Your answer has been Saved!');
+        return redirect()->route('question.show',['question_id' => $question->id]);
     }
+
     /**
      * Display the specified resource.
      *
@@ -87,10 +90,14 @@ class AnswerController extends Controller
             'body.required' => 'Body is required',
             'body.min' => 'Body must be at least 5 characters',
         ]);
+
         $answer = Answer::find($answer);
         $answer->body = $request->body;
         $answer->save();
-        return redirect()->route('answer.show',['question_id' => $question, 'answer_id' => $answer])->with('message', 'Updated');
+
+        session()->flash('app_message', 'Your answer has been Updated!');
+
+        return redirect()->route('answer.show',['question_id' => $question, 'answer_id' => $answer]);
     }
     /**
      * Remove the specified resource from storage.
@@ -102,6 +109,8 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($answer);
         $answer->delete();
-        return redirect()->route('question.show',['question_id' => $question])->with('message', 'Delete');
+        session()->flash('app_message', 'Your answer has been Delete!');
+
+        return redirect()->route('question.show',['question_id' => $question]);
     }
 }
